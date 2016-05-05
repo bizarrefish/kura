@@ -51,6 +51,41 @@ import org.eclipse.kura.KuraException;
 public interface ConfigurationService 
 {
 	/**
+	 * Returns the list of PIDs for Component with ConfigAdmin-driven Factory.
+	 */
+	public Set<String> getComponentFactoryPids();
+	
+	/**
+	 * Returns the OCD with default property values for the components built through the specified factoryPid.
+	 */
+	public ComponentConfiguration getComponentDefaultConfiguration(String factoryPid) throws KuraException;
+	
+	/**
+	 * Returns the PID of a new component created through the specified factoryPid.
+	 * @param factoryPid The pid of the factory to use for the new instance
+	 * @param properties a map of properties describing the component configuration. If null the implementation
+	 * should create a new ConfigurableComponent with the default properties from the factory
+	 * @param takeSnapshot if set to true a snapshot will be taken after the Component has been registered
+	 * @param instanceName set the multiton.instance.name property of the resulting Component.
+	 * 
+	 * @throws KuraException if creation fails or if instanceName is left to null
+	 */
+	public String newConfigurableComponent(String factoryPid, Map<String,Object> properties, boolean takeSnapshot, String instanceName) throws KuraException;
+
+	/**
+	 * Deletes the specified component.
+	 */
+	public void deleteConfigurableComponent(String pid) throws KuraException;
+
+	/**
+	 * Returns the current Pid for the multiton instance whose Pid was stored in a snapshot.
+	 * Can return itself if the instance Pid has not changed for some reason.
+	 * @param snapshotPid Pid previously assigned to this instance in a previous configuration
+	 * @return the new Pid as returned by the Configuration Service while instantiating the component
+	 */
+	public String getCurrentComponentPid(String snapshotPid);
+	
+	/**
 	 * Return the PIDs (service's persistent identity) for all the services that 
 	 * implements the ConfigurableComponent Maker interface and registered themselves
 	 * with the container.
@@ -105,7 +140,52 @@ public interface ConfigurationService
 	public void updateConfiguration(String pid, Map<String,Object> properties)
 		throws KuraException;
 
+	/**
+	 * Updates the Configuration of the registered component with the specified pid.
+	 * Using the OSGi ConfigurationAdmin, it retrieves the Configuration of the 
+	 * component with the specified PID and then send an update using the 
+	 * specified properties.
+	 * <br>
+	 * If the component to be updated is not yet registered with the ConfigurationService,
+	 * it is first registered and then it is updated with the specified properties.
+	 * Before updating the component, the specified properties are validated against
+	 * the ObjectClassDefinition associated to the Component. The Configuration Service
+	 * is fully compliant with the OSGi MetaType Information and the validation happens
+	 * through the OSGi MetaType Service.
+	 * <br>
+	 * The Configuration Service is compliant with the OSGi MetaType Service so 
+	 * it accepts all attribute types defined in the OSGi Compendium Specifications.
+	 * <br>
+	 * 
+	 * @param pid The ID of the component whose configuration is requested.
+	 * @param properties Properties to be used as the new Configuration for the specified Component.
+	 * @param takeSnapshot defines wheter or not this configuration update should trigger a snapshot
+	 * @throws KuraException if the properties specified do not pass the validation of the ObjectClassDefinition
+	 */
+	public void updateConfiguration(String pid, Map<String,Object> properties, boolean takeSnapshot)
+		throws KuraException;
 
+	/**
+	 * Updates the Configuration of the registered components.
+	 * Using the OSGi ConfigurationAdmin, it retrieves the Configuration of the 
+	 * component with the specified PID and then send an update using the 
+	 * specified properties.
+	 * <br>
+	 * If the component to be updated is not yet registered with the ConfigurationService,
+	 * it is first registered and then it is updated with the specified properties.
+	 * Before updating the component, the specified properties are validated against
+	 * the ObjectClassDefinition associated to the Component. The Configuration Service
+	 * is fully compliant with the OSGi MetaType Information and the validation happens
+	 * through the OSGi MetaType Service.
+	 * <br>
+	 * The Configuration Service is compliant with the OSGi MetaType Service so 
+	 * it accepts all attribute types defined in the OSGi Compendium Specifications.
+	 * <br>
+	 * it accepts all 
+	 * @param pid The ID of the component whose configuration is requested.
+	 * @param properties Properties to be used as the new Configuration for the specified Component.
+	 * @throws KuraException if the properties specified do not pass the validation of the ObjectClassDefinition
+	 */	
 	public void updateConfigurations(List<ComponentConfiguration> configs)
 		throws KuraException;
 		

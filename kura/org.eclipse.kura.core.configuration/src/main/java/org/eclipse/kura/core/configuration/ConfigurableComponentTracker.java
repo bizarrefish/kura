@@ -85,15 +85,16 @@ public class ConfigurableComponentTracker extends ServiceTracker
 								s_logger.info("Could not find service for: {}", ref);
 							}
 							else if (obj instanceof ConfigurableComponent) {
-								s_logger.info("Adding ConfigurableComponent {}", pid);
-								m_confService.registerComponentConfiguration(ref.getBundle(), pid);
+								String factoryPid = (String) ref.getProperty("service.factoryPid");
+								s_logger.info("Adding ConfigurableComponent {} with factoryPid {}", pid, factoryPid);
+								m_confService.registerComponentConfiguration(ref.getBundle(), pid, factoryPid);
 							}
 							else if (obj instanceof SelfConfiguringComponent) {
 								s_logger.info("Adding SelfConfiguringComponent {}", pid);
 								m_confService.registerSelfConfiguringComponent(pid);			    		
 							} else if (obj instanceof ManagedService) {
 								s_logger.info("Adding ManagedService as a ConfigurableComponent {}", pid);
-								m_confService.registerComponentConfiguration(ref.getBundle(), pid);								
+								m_confService.registerComponentConfiguration(ref.getBundle(), pid, null);								
 							}
 						}
 						finally {
@@ -109,7 +110,7 @@ public class ConfigurableComponentTracker extends ServiceTracker
 		catch (KuraException e) {
 			s_logger.error("Error in addingBundle", e);
 		}
-	};
+	}
 
 	
 	@SuppressWarnings({ "unchecked" })
@@ -124,9 +125,10 @@ public class ConfigurableComponentTracker extends ServiceTracker
 		}
 		if (pid != null) {
 			if (service instanceof ConfigurableComponent) {
-				s_logger.info("Adding ConfigurableComponent {}", pid);
 				try {
-					m_confService.registerComponentConfiguration(ref.getBundle(), pid);
+					String factoryPid = (String) ref.getProperty("service.factoryPid");
+					s_logger.info("Adding ConfigurableComponent {} with factoryPid {}", pid, factoryPid);					
+					m_confService.registerComponentConfiguration(ref.getBundle(), pid, factoryPid);
 				} 
 				catch (KuraException e) {
 					s_logger.info("Error adding ConfigurableComponent {} {}", pid, e);
@@ -142,7 +144,8 @@ public class ConfigurableComponentTracker extends ServiceTracker
 			} else if (service instanceof ManagedService) {
 				s_logger.info("Adding ManagedService as a ConfigurableComponent {}", pid);
 				try {
-					m_confService.registerComponentConfiguration(ref.getBundle(), pid);
+					String factoryPid = (String) ref.getProperty("service.factoryPid");
+					m_confService.registerComponentConfiguration(ref.getBundle(), pid, factoryPid);
 				} 
 				catch (KuraException e) {
 					s_logger.info("Error adding ManagedService as a ConfigurableComponent {} {}", pid, e);
@@ -151,7 +154,7 @@ public class ConfigurableComponentTracker extends ServiceTracker
 		}
 
 		return service;
-	};
+	}
 
 	
 	@SuppressWarnings({ "unchecked" })

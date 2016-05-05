@@ -68,8 +68,13 @@ public class GwtComponentServiceImpl extends OsgiRemoteServiceServlet implements
 				if (ocd != null) {
 
 					GwtConfigComponent gwtConfig = new GwtConfigComponent();
-					gwtConfig.setComponentId(ocd.getId());
-					gwtConfig.setComponentName(ocd.getName());
+					//gwtConfig.setComponentId(ocd.getId());
+					gwtConfig.setComponentId(config.getPid());
+					if(config.getConfigurationProperties().get("multiton.instance.name")!=null){
+						gwtConfig.setComponentName(config.getConfigurationProperties().get("multiton.instance.name").toString());
+					}else{
+						gwtConfig.setComponentName(ocd.getName());
+					}
 					gwtConfig.setComponentDescription(ocd.getDescription());
 					if (ocd.getIcon() != null && !ocd.getIcon().isEmpty()) {
 						Icon icon = ocd.getIcon().get(0);
@@ -165,8 +170,15 @@ public class GwtComponentServiceImpl extends OsgiRemoteServiceServlet implements
 				if (ocd != null) {
 
 					GwtConfigComponent gwtConfig = new GwtConfigComponent();
-					gwtConfig.setComponentId(ocd.getId());
-					gwtConfig.setComponentName(ocd.getName());
+					//gwtConfig.setComponentId(ocd.getId());
+					gwtConfig.setComponentId(config.getPid());
+					
+					if(config.getConfigurationProperties().get("multiton.instance.name")!=null){
+						gwtConfig.setComponentName(config.getConfigurationProperties().get("multiton.instance.name").toString());
+					}else{
+						gwtConfig.setComponentName(ocd.getName());
+					}
+					
 					gwtConfig.setComponentDescription(ocd.getDescription());
 					if (ocd.getIcon() != null && !ocd.getIcon().isEmpty()) {
 						Icon icon = ocd.getIcon().get(0);
@@ -237,6 +249,8 @@ public class GwtComponentServiceImpl extends OsgiRemoteServiceServlet implements
 
 			// Build the new properties
 			Map<String,Object> properties = new HashMap<String,Object>();
+			ComponentConfiguration backupCC= cs.getComponentConfiguration(gwtCompConfig.getComponentId());
+			Map<String,Object> backupConfigProp= backupCC.getConfigurationProperties();
 			for (GwtConfigParameter gwtConfigParam : gwtCompConfig.getParameters()) {
 
 				Object objValue = null;
@@ -274,6 +288,10 @@ public class GwtComponentServiceImpl extends OsgiRemoteServiceServlet implements
 				properties.put(gwtConfigParam.getName(), objValue);
 			}
 
+			// Force multiton.instance.name into properties, if originally present
+			if(backupConfigProp.get("multiton.instance.name")!=null){
+				properties.put("multiton.instance.name", backupConfigProp.get("multiton.instance.name"));
+			}
 			//
 			// apply them
 			cs.updateConfiguration(gwtCompConfig.getComponentId(), properties);
