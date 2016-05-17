@@ -287,6 +287,9 @@ fi
 		<copy file="src/main/resources/common/kura.init.raspbian"
               tofile="${project.build.directory}/${build.output.name}/kura.init.raspbian"
         	  failonerror="false" />
+       	<copy file="src/main/resources/common/kura.init.olinuxino"
+              tofile="${project.build.directory}/${build.output.name}/kura.init.olinuxino"
+        	  failonerror="false" />
 		<copy file="src/main/resources/common/kura.service.edison"
               tofile="${project.build.directory}/${build.output.name}/kura.service.edison"
         	  failonerror="false" />
@@ -294,6 +297,7 @@ fi
 		<replaceregexp file="${project.build.directory}/${build.output.name}/kura.init.wrl" match="INSTALL_DIR=.*" replace="INSTALL_DIR=${kura.install.dir}" />
 		<replaceregexp file="${project.build.directory}/${build.output.name}/kura.init.yocto" match="INSTALL_DIR=.*" replace="INSTALL_DIR=${kura.install.dir}" />
 		<replaceregexp file="${project.build.directory}/${build.output.name}/kura.init.raspbian" match="INSTALL_DIR=.*" replace="INSTALL_DIR=${kura.install.dir}" />
+		<replaceregexp file="${project.build.directory}/${build.output.name}/kura.init.olinuxino" match="INSTALL_DIR=.*" replace="INSTALL_DIR=${kura.install.dir}" />
 		<replaceregexp file="${project.build.directory}/${build.output.name}/kura.service.edison" match="INSTALL_DIR" replace="${kura.install.dir}" />
 
 
@@ -326,6 +330,8 @@ fi
                         prefix="${build.output.name}/install" />
 			<zipfileset file="${project.build.directory}/${build.output.name}/kura.init.raspbian"
                         prefix="${build.output.name}/install" />
+            <zipfileset file="${project.build.directory}/${build.output.name}/kura.init.olinuxino"
+                        prefix="${build.output.name}/install" />
 			<zipfileset file="${project.build.directory}/${build.output.name}/kura.service.edison"
                         prefix="${build.output.name}/install" />
 			<zipfileset file="src/main/resources/${build.name}/recover_default_config.init"
@@ -340,11 +346,15 @@ fi
                         prefix="${build.output.name}/install" />
 			<zipfileset file="src/main/resources/common/monit.init.raspbian"
                         prefix="${build.output.name}/install" />
+          	<zipfileset file="src/main/resources/common/monit.init.olinuxino"
+                        prefix="${build.output.name}/install" />
 			<zipfileset file="src/main/resources/common/monitrc.wrl"
                         prefix="${build.output.name}/install" />
 			<zipfileset file="src/main/resources/common/monitrc.yocto"
                         prefix="${build.output.name}/install" />
 			<zipfileset file="src/main/resources/common/monitrc.raspbian"
+                        prefix="${build.output.name}/install" />
+            <zipfileset file="src/main/resources/common/monitrc.olinuxino"
                         prefix="${build.output.name}/install" />
 
 
@@ -398,6 +408,8 @@ fi
                         prefix="${build.output.name}/install" />
 			<zipfileset file="src/main/resources/common/network.interfaces.raspbian"
                         prefix="${build.output.name}/install" />
+            <zipfileset file="src/main/resources/common/network.interfaces.olinuxino"
+                        prefix="${build.output.name}/install" />
 			<zipfileset file="src/main/resources/common/network.interfaces.intel.edison"
                         prefix="${build.output.name}/install" />
 			<zipfileset file="src/main/resources/common/ifdown-local"
@@ -408,7 +420,8 @@ fi
                         prefix="${build.output.name}/install" />
 			<zipfileset file="src/main/resources/common/ifup-local.raspbian"
                         prefix="${build.output.name}/install" />
-
+			<zipfileset file="src/main/resources/common/ifup-local.olinuxino"
+                        prefix="${build.output.name}/install" />
 			<zipfileset file="src/main/resources/common/ip-down.local"
                         prefix="${build.output.name}/install" />
 			<zipfileset file="src/main/resources/common/ip-up.local"
