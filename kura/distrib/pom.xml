@@ -1774,7 +1774,7 @@
 		<profile>
 			<id>olinuxino</id>
 			<properties>
-				<project.raspbian.dependencies>hostapd, isc-dhcp-server, iw, dos2unix, bind9, unzip, ethtool, telnet</project.raspbian.dependencies>
+				<project.raspbian.dependencies>hostapd, isc-dhcp-server, iw, dos2unix, bind9, unzip, ethtool, telnet, wireless-tools</project.raspbian.dependencies>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
@@ -1821,7 +1821,7 @@
 										<property name="target.device" value="olinuxino" />
 										<property name="kura.os.version" value="debian" />
 										<property name="kura.arch" value="armv7_hf" />
-										<property name="kura.mem.size" value="512m" />
+										<property name="kura.mem.size" value="256m" />
 										<property name="kura.install.dir" value="/opt/eclipse" />
 										<ant antfile="${basedir}/src/main/ant/build_equinox_distrib.xml"
 											target="dist-linux" />
