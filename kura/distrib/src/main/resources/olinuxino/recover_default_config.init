@@ -32,6 +32,12 @@ case $response in
                 echo "  done"
         fi
 
+	echo Copying the $dflt_data_dir/dhcpd-usb0.conf file to the /etc directory ...
+	cp $dflt_data_dir/dhcpd-usb0.conf /etc
+	if [ "#?" = "0" ]; then
+		echo "  done"
+	fi
+
 	echo Copying the $dflt_data_dir/hostapd-wlan0.conf file to the /etc directory ...
 	cp $dflt_data_dir/hostapd-wlan0.conf /etc
 	if [ "$?" = "0" ]; then

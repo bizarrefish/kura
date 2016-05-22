@@ -14,4 +14,9 @@ auto wlan0
 iface wlan0 inet static
     address 172.16.1.1
     netmask 255.255.255.0
+    
+auto usb0
+iface usb0 inet static
+    address 172.16.2.1
+    netmask 255.255.255.0
 

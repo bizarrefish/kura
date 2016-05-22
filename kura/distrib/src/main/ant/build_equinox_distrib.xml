@@ -369,6 +369,8 @@ fi
                         prefix="${build.output.name}/install" />
 			<zipfileset file="src/main/resources/common/dhcpd-wlan0.conf"
                         prefix="${build.output.name}/install" />
+            <zipfileset file="src/main/resources/common/dhcpd-usb0.conf"
+                        prefix="${build.output.name}/install" />
 			<!-- <intel-edison> -->
 			<zipfileset file="src/main/resources/${build.name}/udhcpd-for-hostapd.service"
                         prefix="${build.output.name}/install" />

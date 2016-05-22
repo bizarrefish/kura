@@ -66,6 +66,9 @@ cp ${INSTALL_DIR}/kura/install/dhcpd-eth0.conf ${INSTALL_DIR}/kura/.data/dhcpd-e
 cp ${INSTALL_DIR}/kura/install/dhcpd-wlan0.conf /etc/dhcpd-wlan0.conf
 cp ${INSTALL_DIR}/kura/install/dhcpd-wlan0.conf ${INSTALL_DIR}/kura/.data/dhcpd-wlan0.conf
 
+cp ${INSTALL_DIR}/kura/install/dhcpd-usb0.conf /etc/dhcpd-usb0.conf
+cp ${INSTALL_DIR}/kura/install/dhcpd-usb0.conf ${INSTALL_DIR}/kura/.data/dhcpd-usb0.conf
+
 #set up kuranet.conf
 mkdir -p ${INSTALL_DIR}/kura/data
 cp ${INSTALL_DIR}/kura/install/kuranet.conf ${INSTALL_DIR}/kura/data/kuranet.conf
