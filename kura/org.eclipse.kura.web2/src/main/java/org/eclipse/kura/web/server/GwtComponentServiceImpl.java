@@ -68,8 +68,17 @@ public class GwtComponentServiceImpl extends OsgiRemoteServiceServlet implements
 				if (ocd != null) {
 
 					GwtConfigComponent gwtConfig = new GwtConfigComponent();
-					gwtConfig.setComponentId(ocd.getId());
-					gwtConfig.setComponentName(ocd.getName());
+					//gwtConfig.setComponentId(ocd.getId());
+					gwtConfig.setComponentId(config.getPid());
+					
+					Map<String, Object> props = config.getConfigurationProperties();
+					if (props != null && props.get("service.factoryPid") != null){
+						String pid = stripPidPrefix(config.getPid());
+						gwtConfig.setComponentName(pid);
+					}else{
+						gwtConfig.setComponentName(ocd.getName());
+					}
+					
 					gwtConfig.setComponentDescription(ocd.getDescription());
 					if (ocd.getIcon() != null && !ocd.getIcon().isEmpty()) {
 						Icon icon = ocd.getIcon().get(0);
@@ -165,8 +174,17 @@ public class GwtComponentServiceImpl extends OsgiRemoteServiceServlet implements
 				if (ocd != null) {
 
 					GwtConfigComponent gwtConfig = new GwtConfigComponent();
-					gwtConfig.setComponentId(ocd.getId());
-					gwtConfig.setComponentName(ocd.getName());
+					//gwtConfig.setComponentId(ocd.getId());
+					gwtConfig.setComponentId(config.getPid());
+					
+					Map<String, Object> props = config.getConfigurationProperties();
+					if (props != null && props.get("service.factoryPid") != null){
+						String pid = stripPidPrefix(config.getPid());
+						gwtConfig.setComponentName(pid);
+					}else{
+						gwtConfig.setComponentName(ocd.getName());
+					}
+					
 					gwtConfig.setComponentDescription(ocd.getDescription());
 					if (ocd.getIcon() != null && !ocd.getIcon().isEmpty()) {
 						Icon icon = ocd.getIcon().get(0);
@@ -237,6 +255,8 @@ public class GwtComponentServiceImpl extends OsgiRemoteServiceServlet implements
 
 			// Build the new properties
 			Map<String,Object> properties = new HashMap<String,Object>();
+			ComponentConfiguration backupCC= cs.getComponentConfiguration(gwtCompConfig.getComponentId());
+			Map<String,Object> backupConfigProp= backupCC.getConfigurationProperties();
 			for (GwtConfigParameter gwtConfigParam : gwtCompConfig.getParameters()) {
 
 				Object objValue = null;
@@ -274,6 +294,10 @@ public class GwtComponentServiceImpl extends OsgiRemoteServiceServlet implements
 				properties.put(gwtConfigParam.getName(), objValue);
 			}
 
+			// Force kura.service.pid into properties, if originally present
+			if(backupConfigProp.get("kura.service.pid")!=null){
+				properties.put("kura.service.pid", backupConfigProp.get("kura.service.pid"));
+			}
 			//
 			// apply them
 			cs.updateConfiguration(gwtCompConfig.getComponentId(), properties);
@@ -335,62 +359,89 @@ public class GwtComponentServiceImpl extends OsgiRemoteServiceServlet implements
 		switch (type) {
 		case BOOLEAN:
 			for (String value : defaultValues) {
-				values.add(Boolean.valueOf(value));				
+				if (!value.trim().isEmpty())
+					values.add(Boolean.valueOf(value));				
 			}
 			return values.toArray( new Boolean[]{});
 
 		case BYTE: 
 			for (String value : defaultValues) {
-				values.add(Byte.valueOf(value));				
+				if (!value.trim().isEmpty())
+					values.add(Byte.valueOf(value));				
 			}
 			return values.toArray( new Byte[]{});
 
 		case CHAR: 
 			for (String value : defaultValues) {
-				values.add( new Character(value.charAt(0)));		
+				if (!value.trim().isEmpty())
+					values.add( new Character(value.charAt(0)));		
 			}
 			return values.toArray( new Character[]{});
 
 		case DOUBLE: 
 			for (String value : defaultValues) {
-				values.add(Double.valueOf(value));		
+				if (!value.trim().isEmpty())
+					values.add(Double.valueOf(value));		
 			}
 			return values.toArray( new Double[]{});
 
 		case FLOAT: 
 			for (String value : defaultValues) {
-				values.add(Float.valueOf(value));
+				if (!value.trim().isEmpty())
+					values.add(Float.valueOf(value));
 			}
 			return values.toArray( new Float[]{});
 
 		case INTEGER: 
 			for (String value : defaultValues) {
-				values.add(Integer.valueOf(value));		
+				if (!value.trim().isEmpty())
+					values.add(Integer.valueOf(value));		
 			}
 			return values.toArray( new Integer[]{});
 
 		case LONG: 
 			for (String value : defaultValues) {
-				values.add(Long.valueOf(value));		
+				if (!value.trim().isEmpty())
+					values.add(Long.valueOf(value));		
 			}
 			return values.toArray( new Long[]{});
 
 		case SHORT: 
 			for (String value : defaultValues) {
-				values.add(Short.valueOf(value));		
+				if (!value.trim().isEmpty())
+					values.add(Short.valueOf(value));		
 			}
 			return values.toArray( new Short[]{});
 
 		case PASSWORD: 
 			for (String value : defaultValues) {
-				values.add( new Password(value));		
+				if (!value.trim().isEmpty())
+					values.add( new Password(value));		
 			}
 			return values.toArray( new Password[]{});
 
 		case STRING:
-			return defaultValues;
+			for (String value : defaultValues) {
+				if (!value.trim().isEmpty())
+					values.add(value);
+			}
+			return values.toArray( new String[]{});
 		}
 
 		return null;
+	}
+	
+	private String stripPidPrefix(String pid) {
+		int start = pid.lastIndexOf('.');
+		if (start < 0) {
+			return pid;
+		} else {
+			int begin = start + 1;
+			if (begin < pid.length()) {
+				return pid.substring(begin);
+			} else {
+				return pid;
+			}
+		}
 	}
 }

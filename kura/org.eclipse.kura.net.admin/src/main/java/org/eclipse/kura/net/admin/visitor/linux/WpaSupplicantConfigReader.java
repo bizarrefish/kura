@@ -204,7 +204,7 @@ public class WpaSupplicantConfigReader implements NetworkConfigurationVisitor {
 		        String keyMgmt = props.getProperty("key_mgmt");
 		        s_logger.debug("current wpa_supplicant.conf: key_mgmt={}", keyMgmt);
 		        if (keyMgmt != null && keyMgmt.equalsIgnoreCase("WPA-PSK")) {
-		            password = props.getProperty("psk");
+		        	password = props.getProperty("psk");
 		            if (proto != null) {
 						if(proto.trim().equals("WPA")) {
 							wifiSecurity = WifiSecurity.SECURITY_WPA;
@@ -217,17 +217,18 @@ public class WpaSupplicantConfigReader implements NetworkConfigurationVisitor {
 						wifiSecurity = WifiSecurity.SECURITY_WPA2;
 					}
 		        } else {
-		            password = props.getProperty("wep_key0");
+		        	password = props.getProperty("wep_key0");
 		            if (password != null) {
 		                wifiSecurity = WifiSecurity.SECURITY_WEP;
 		            } else {
 		                wifiSecurity = WifiSecurity.SECURITY_NONE;
 		            }
+		            		        	
 		            pairwiseCiphers = null;
 		            groupCiphers = null;
 		        }
 		        if(password == null) {
-		        	password = "";
+		            password = "";
 		        }
 		        
 		        String sBgscan = props.getProperty("bgscan");

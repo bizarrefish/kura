@@ -335,8 +335,6 @@ public class HostapdConfigWriter implements NetworkConfigurationVisitor {
 					throw KuraException.internalError("the WEP key (passwd) must be 10, 26, or 32 HEX characters in length");
 				}
 				
-			} else {
-				throw KuraException.internalError("the passwd can not be null");
 			}
 			
 			if (wifiConfig.ignoreSSID()) {
